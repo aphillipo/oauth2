@@ -1,4 +1,4 @@
-defmodule OAuth2.Strategy.Refresh do
+defmodule OAuth2Client.Strategy.Refresh do
   @moduledoc """
   The Refresh Token Strategy.
 
@@ -22,13 +22,13 @@ defmodule OAuth2.Strategy.Refresh do
   to resource servers.
   """
 
-  use OAuth2.Strategy
+  use OAuth2Client.Strategy
 
   @doc """
   Not used for this strategy.
   """
   def authorize_url(_client, _params) do
-    raise OAuth2.Error, reason: "This strategy does not implement `authorize_url`."
+    raise OAuth2Client.Error, reason: "This strategy does not implement `authorize_url`."
   end
 
   @doc """
@@ -38,7 +38,7 @@ defmodule OAuth2.Strategy.Refresh do
     {token, params} = Keyword.pop(params, :refresh_token, client.params["refresh_token"])
 
     unless token do
-      raise OAuth2.Error, reason: "Missing required key `refresh_token` for `#{inspect __MODULE__}`"
+      raise OAuth2Client.Error, reason: "Missing required key `refresh_token` for `#{inspect __MODULE__}`"
     end
 
     client

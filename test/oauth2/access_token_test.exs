@@ -1,12 +1,12 @@
-defmodule OAuth2.AccessTokenTest do
+defmodule OAuth2Client.AccessTokenTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  import OAuth2.TestHelpers
+  import OAuth2Client.TestHelpers
 
-  alias OAuth2.Response
-  alias OAuth2.AccessToken
-  alias OAuth2.Strategy.AuthCode
+  alias OAuth2Client.Response
+  alias OAuth2Client.AccessToken
+  alias OAuth2Client.Strategy.AuthCode
 
   setup do
     server = Bypass.open
@@ -146,7 +146,7 @@ defmodule OAuth2.AccessTokenTest do
   test "connection error", %{server: server, token: token} do
     Bypass.down(server)
 
-    assert_raise OAuth2.Error, "Connection refused", fn ->
+    assert_raise OAuth2Client.Error, "Connection refused", fn ->
       AccessToken.get!(token, "/api/error")
     end
 
@@ -163,7 +163,7 @@ defmodule OAuth2.AccessTokenTest do
     {:error, error} = AccessToken.refresh(token)
     assert error.reason =~ ~r/token not available/
 
-    assert_raise OAuth2.Error, ~r/token not available/, fn ->
+    assert_raise OAuth2Client.Error, ~r/token not available/, fn ->
       AccessToken.refresh!(token)
     end
 
@@ -185,6 +185,6 @@ defmodule OAuth2.AccessTokenTest do
 
   test "expires_in" do
     assert AccessToken.expires_at(nil) == nil
-    assert AccessToken.expires_at(3600) == OAuth2.Util.unix_now + 3600
+    assert AccessToken.expires_at(3600) == OAuth2Client.Util.unix_now + 3600
   end
 end

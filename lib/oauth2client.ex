@@ -1,6 +1,6 @@
-defmodule OAuth2 do
+defmodule OAuth2Client do
   @moduledoc """
-  The OAuth2 specification
+  The OAuth2 Client specification
 
   http://tools.ietf.org/html/rfc6749
 
@@ -22,8 +22,8 @@ defmodule OAuth2 do
 
   Initialize a client with your client_id, client_secret, and site.
 
-      client = OAuth2.Client.new([
-        strategy: OAuth2.Strategy.AuthCode, # default strategy is AuthCode
+      client = OAuth2Client.Client.new([
+        strategy: OAuth2Client.Strategy.AuthCode, # default strategy is AuthCode
         client_id: "client_id",
         client_secret: "abc123",
         site: "https://auth.example.com",
@@ -32,25 +32,25 @@ defmodule OAuth2 do
 
   Generate the authorization URL and redirect the user to the provider.
 
-      OAuth2.Client.authorize_url(client)
+      OAuth2Client.Client.authorize_url(client)
       # => "https://auth.example.com/oauth/authorize?client_id=client_id&redirect_uri=https%3A%2F%2Fexample.com%2Fauth%2Fcallback&response_type=code"
 
   Use the authorization code returned from the provider to obtain an access token.
 
-      token = OAuth2.Client.get_token!(client, code: "someauthcode")
+      token = OAuth2Client.Client.get_token!(client, code: "someauthcode")
 
-  You can also use `OAuth2.Client.put_param/3` to update the client's `params` field.
+  You can also use `OAuth2Client.Client.put_param/3` to update the client's `params` field.
 
   Example:
 
       token =
         client
-        |> OAuth2.Client.put_param(:code, "someauthcode")
-        |> OAuth2.Client.get_token!()
+        |> OAuth2Client.Client.put_param(:code, "someauthcode")
+        |> OAuth2Client.Client.get_token!()
 
   Use the access token to make a request for resources
 
-      resource = OAuth2.AccessToken.get!(token, "/api/resource")
+      resource = OAuth2Client.AccessToken.get!(token, "/api/resource")
   """
 
   @type opts :: Keyword.t

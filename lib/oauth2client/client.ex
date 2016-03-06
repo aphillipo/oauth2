@@ -1,6 +1,6 @@
-defmodule OAuth2.Client do
+defmodule OAuth2Client.Client do
   @moduledoc """
-  This module defines the `OAuth2.Client` struct and is responsible for building
+  This module defines the `OAuth2Client.Client` struct and is responsible for building
   and establishing a request for an access token.
   """
 
@@ -30,7 +30,7 @@ defmodule OAuth2.Client do
               headers:       headers,
               redirect_uri:  redirect_uri}
 
-  defstruct strategy: OAuth2.Strategy.AuthCode,
+  defstruct strategy: OAuth2Client.Strategy.AuthCode,
             client_id: "",
             client_secret: "",
             site: "",
@@ -41,10 +41,10 @@ defmodule OAuth2.Client do
             headers: [],
             redirect_uri: ""
 
-  alias OAuth2.Error
-  alias OAuth2.Client
-  alias OAuth2.Request
-  alias OAuth2.AccessToken
+  alias OAuth2Client.Error
+  alias OAuth2Client.Client
+  alias OAuth2Client.Request
+  alias OAuth2Client.AccessToken
 
   @doc """
   Builds a new OAuth2 client struct using the `opts` provided.
@@ -52,7 +52,7 @@ defmodule OAuth2.Client do
   ## Client struct fields
 
   * `strategy` - a module that implements the appropriate OAuth2 strategy,
-    default `OAuth2.Strategy.AuthCode`
+    default `OAuth2Client.Strategy.AuthCode`
   * `client_id` - the client_id for the OAuth2 provider
   * `client_secret` - the client_secret for the OAuth2 provider
   * `site` - the OAuth2 provider site host
@@ -84,7 +84,7 @@ defmodule OAuth2.Client do
   @doc """
   Set multiple params in the client in one call.
   """
-  @spec merge_params(t, OAuth2.params) :: t
+  @spec merge_params(t, OAuth2Client.params) :: t
   def merge_params(client, params) do
     params = Enum.reduce(params, %{}, fn {k,v}, acc ->
       Map.put(acc, param_key(k), v)
@@ -122,7 +122,7 @@ defmodule OAuth2.Client do
 
   ## Example
 
-      redirect_url = OAuth2.Client.authorize_url!(%OAuth2.Client{})
+      redirect_url = OAuth2Client.Client.authorize_url!(%OAuth2Client.Client{})
   """
   @spec authorize_url!(t, list) :: binary
   def authorize_url!(client, params \\ []) do
@@ -131,16 +131,16 @@ defmodule OAuth2.Client do
   end
 
   @doc """
-  Initializes an `OAuth2.AccessToken` struct by making a request to the token
+  Initializes an `OAuth2Client.AccessToken` struct by making a request to the token
   endpoint.
 
-  Returns an `OAuth2.AccessToken` struct that can then be used to access the
+  Returns an `OAuth2Client.AccessToken` struct that can then be used to access the
   provider's RESTful API.
 
   ## Arguments
 
-  * `client` - a `OAuth2.Client` struct with the strategy to use, defaults to
-    `OAuth2.Strategy.AuthCode`
+  * `client` - a `OAuth2Client.Client` struct with the strategy to use, defaults to
+    `OAuth2Client.Strategy.AuthCode`
   * `params` - a keyword list of request parameters
   * `headers` - a list of request headers
   * `opts` - a `Keyword` list of options
@@ -161,7 +161,7 @@ defmodule OAuth2.Client do
   end
 
   @doc """
-  Same as `get_token/4` but raises `OAuth2.Error` if an error occurs during the
+  Same as `get_token/4` but raises `OAuth2Client.Error` if an error occurs during the
   request.
   """
   @spec get_token!(t, params, headers, Keyword.t) :: AccessToken.t | Error.t

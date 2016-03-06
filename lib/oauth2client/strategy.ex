@@ -1,4 +1,4 @@
-defmodule OAuth2.Strategy do
+defmodule OAuth2Client.Strategy do
   @moduledoc ~S"""
   The OAuth2 strategy specification.
 
@@ -9,12 +9,12 @@ defmodule OAuth2.Strategy do
   Here's an example strategy for authenticating with GitHub.
 
       defmodule GitHub do
-        use OAuth2.Strategy
+        use OAuth2Client.Strategy
 
         # Public API
 
         def new do
-          OAuth2.Client.new([
+          OAuth2Client.Client.new([
             strategy: __MODULE__,
             client_id: "abc123",
             client_secret: "abcdefg",
@@ -28,23 +28,23 @@ defmodule OAuth2.Strategy do
         def authorize_url!(params \\ []) do
           new()
           |> put_param(:scope, "user,public_repo")
-          |> OAuth2.Client.authorize_url!(params)
+          |> OAuth2Client.Client.authorize_url!(params)
         end
 
         def get_token!(params \\ [], headers \\ []) do
-          OAuth2.Client.get_token!(new(), params, headers)
+          OAuth2Client.Client.get_token!(new(), params, headers)
         end
 
         # Strategy Callbacks
 
         def authorize_url(client, params) do
-          OAuth2.Strategy.AuthCode.authorize_url(client, params)
+          OAuth2Client.Strategy.AuthCode.authorize_url(client, params)
         end
 
         def get_token(client, params, headers) do
           client
           |> put_header("Accept", "application/json")
-          |> OAuth2.Strategy.AuthCode.get_token(params, headers)
+          |> OAuth2Client.Strategy.AuthCode.get_token(params, headers)
         end
       end
 
@@ -60,12 +60,12 @@ defmodule OAuth2.Strategy do
 
   Use the access token to access desired resources.
 
-      user = OAuth2.AccessToken.get!(token, "/user")
+      user = OAuth2Client.AccessToken.get!(token, "/user")
   """
 
   use Behaviour
 
-  alias OAuth2.Client
+  alias OAuth2Client.Client
 
   @doc """
   Builds the URL to the authorization endpoint.
@@ -80,7 +80,7 @@ defmodule OAuth2.Strategy do
         |> merge_params(params)
       end
   """
-  defcallback authorize_url(Client.t, OAuth2.params) :: Client.t
+  defcallback authorize_url(Client.t, OAuth2Client.params) :: Client.t
 
   @doc """
   Builds the URL to token endpoint.
@@ -98,11 +98,11 @@ defmodule OAuth2.Strategy do
         |> put_headers(headers)
       end
   """
-  defcallback get_token(Client.t, OAuth2.params, OAuth2.headers) :: Client.t
+  defcallback get_token(Client.t, OAuth2Client.params, OAuth2Client.headers) :: Client.t
 
   defmacro __using__(_) do
     quote do
-      import OAuth2.Client
+      import OAuth2Client.Client
     end
   end
 end

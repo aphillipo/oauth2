@@ -4,21 +4,21 @@
 
 ### Improvements
 
-* You can now request a refresh token with `OAuth2.AccessToken.refresh`. The `!` alternative is also available.
+* You can now request a refresh token with `OAuth2Client.AccessToken.refresh`. The `!` alternative is also available.
 * Added `Bypass` for improved testability.
 * `Plug` is no longer a direct dependency. It is only included as a test dependency through the `Bypass` library.
-* `OAuth2.AccessToken` now supports `DELETE` requests with `delete` and `delete!`
+* `OAuth2Client.AccessToken` now supports `DELETE` requests with `delete` and `delete!`
 * More tests!
 
 ### Bug Fixes
 
-* Params are no longer sent in both the body and as a query string for `POST` requests with `OAuth2.Client.get_token`
+* Params are no longer sent in both the body and as a query string for `POST` requests with `OAuth2Client.Client.get_token`
 * Responses will no longer be parsed automatically if the `content-type` is not supported by this lib. Registering custom parsers is a future goal for this library.
 * Errors are now properly raised when they occur.
 
 ### Backwards Incompatible Changes
 
-* `OAuth2.new/1` has been removed. Use `OAuth2.Client.new/1` instead.
+* `OAuth2Client.new/1` has been removed. Use `OAuth2Client.Client.new/1` instead.
 
 Diff: https://github.com/scrogson/oauth2/compare/v0.4.0...v0.5.0
 
@@ -26,7 +26,7 @@ Diff: https://github.com/scrogson/oauth2/compare/v0.4.0...v0.5.0
 
 ### Additions/Improvements
 
-* `OAuth2.AccessToken` now supports: `post`, `post!`, `put`, `put!`, `patch`, and `patch!`.
+* `OAuth2Client.AccessToken` now supports: `post`, `post!`, `put`, `put!`, `patch`, and `patch!`.
 * Better documentation
 * Test coverage improved
 
@@ -36,7 +36,7 @@ Diff: https://github.com/scrogson/oauth2/compare/v0.4.0...v0.5.0
 
 ### Breaking changes
 
-* `OAuth2.AccessToken.get!/4` now returns `OAuth2.Response{}` instead of just the parsed body.
+* `OAuth2Client.AccessToken.get!/4` now returns `OAuth2Client.Response{}` instead of just the parsed body.
 
 ### Aknowledgements
 
@@ -54,7 +54,7 @@ Diff: https://github.com/scrogson/oauth2/compare/v0.2.0...v0.3.0
 ## v0.2.0 (2015-07-13)
 
 - `:erlang.now` was replaced with `:os.timestamp` for compatibility with Erlang 18
-- You can now pass options to the `HTTPoison` library with `OAuth2.Client.get_token/4` and `OAuth2.Client.get_token!/4`
+- You can now pass options to the `HTTPoison` library with `OAuth2Client.Client.get_token/4` and `OAuth2Client.Client.get_token!/4`
 
 Diff: https://github.com/scrogson/oauth2/compare/v0.1.1...v0.2.0
 

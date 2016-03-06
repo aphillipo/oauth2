@@ -1,9 +1,9 @@
-defmodule OAuth2.ClientTest do
+defmodule OAuth2Client.ClientTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  import OAuth2.Client
-  import OAuth2.TestHelpers
+  import OAuth2Client.Client
+  import OAuth2Client.TestHelpers
 
   setup do
     server = Bypass.open
@@ -29,9 +29,9 @@ defmodule OAuth2.ClientTest do
       send_resp(conn, 200, ~s({"access_token":"test1234"}))
     end
 
-    assert {:ok, token} = OAuth2.Client.get_token(client, [code: "code1234"], [{"Accept", "application/json"}])
+    assert {:ok, token} = OAuth2Client.Client.get_token(client, [code: "code1234"], [{"Accept", "application/json"}])
     assert token.access_token == "test1234"
-    assert %OAuth2.AccessToken{} = OAuth2.Client.get_token!(client, [code: "code1234"], [{"Accept", "application/json"}])
+    assert %OAuth2Client.AccessToken{} = OAuth2Client.Client.get_token!(client, [code: "code1234"], [{"Accept", "application/json"}])
   end
 
   test "get_token, get_token! when `:token_method` is `:get`", %{client: client, server: server} do
@@ -45,9 +45,9 @@ defmodule OAuth2.ClientTest do
       send_resp(conn, 200, ~s({"access_token":"test1234"}))
     end
 
-    assert {:ok, token} = OAuth2.Client.get_token(client, code: "code1234")
+    assert {:ok, token} = OAuth2Client.Client.get_token(client, code: "code1234")
     assert token.access_token == "test1234"
-    assert %OAuth2.AccessToken{} = token = OAuth2.Client.get_token!(client, code: "code1234")
+    assert %OAuth2Client.AccessToken{} = token = OAuth2Client.Client.get_token!(client, code: "code1234")
     assert token.access_token == "test1234"
   end
 

@@ -1,13 +1,13 @@
-defmodule OAuth2.Strategy.RefreshTest do
+defmodule OAuth2Client.Strategy.RefreshTest do
 
   use ExUnit.Case, async: true
 
-  import OAuth2.TestHelpers
+  import OAuth2Client.TestHelpers
 
-  alias OAuth2.Strategy.Refresh
+  alias OAuth2Client.Strategy.Refresh
 
   test "authorize_url" do
-    assert_raise OAuth2.Error, ~r/This strategy does not implement/, fn ->
+    assert_raise OAuth2Client.Error, ~r/This strategy does not implement/, fn ->
       Refresh.authorize_url(build_client(), [])
     end
   end
@@ -22,7 +22,7 @@ defmodule OAuth2.Strategy.RefreshTest do
   end
 
   test "get_token throws and error if there is no 'refresh_token' param" do
-    assert_raise OAuth2.Error, ~r/Missing required key `refresh_token`/, fn ->
+    assert_raise OAuth2Client.Error, ~r/Missing required key `refresh_token`/, fn ->
       Refresh.get_token(build_client(), [], [])
     end
   end

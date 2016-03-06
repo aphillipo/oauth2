@@ -1,7 +1,7 @@
-defmodule OAuth2.Response do
+defmodule OAuth2Client.Response do
   @moduledoc """
-  Defines the `OAuth2.Response` struct which is created from the HTTP responses
-  made by the `OAuth2.AccessToken` module.
+  Defines the `OAuth2Client.Response` struct which is created from the HTTP responses
+  made by the `OAuth2Client.AccessToken` module.
 
   ## Struct fields
 
@@ -10,7 +10,7 @@ defmodule OAuth2.Response do
   * `body` - Parsed HTTP response body (based on "Content-Type" header)
   """
 
-  import OAuth2.Util
+  import OAuth2Client.Util
 
   @type status_code :: integer
   @type headers     :: map

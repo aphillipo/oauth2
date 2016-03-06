@@ -1,12 +1,12 @@
-defmodule OAuth2.UtilTest do
+defmodule OAuth2Client.UtilTest do
   use ExUnit.Case, async: true
 
-  alias OAuth2.Util
+  alias OAuth2Client.Util
 
   test "parses mime types" do
     assert "application/json" == Util.content_type([])
 
-    assert_raise OAuth2.Error, fn ->
+    assert_raise OAuth2Client.Error, fn ->
       Util.content_type([{"content-type", "trash; trash"}])
     end
   end

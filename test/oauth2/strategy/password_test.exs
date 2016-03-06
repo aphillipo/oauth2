@@ -1,9 +1,9 @@
-defmodule OAuth2.Strategy.PasswordTest do
+defmodule OAuth2Client.Strategy.PasswordTest do
   use ExUnit.Case, async: true
 
-  alias OAuth2.Strategy.Password
-  import OAuth2.Client
-  import OAuth2.TestHelpers
+  alias OAuth2Client.Strategy.Password
+  import OAuth2Client.Client
+  import OAuth2Client.TestHelpers
 
   setup do
     client = build_client(strategy: Password, site: "http://example.com")
@@ -11,7 +11,7 @@ defmodule OAuth2.Strategy.PasswordTest do
   end
 
   test "authorize_url", %{client: client} do
-    assert_raise OAuth2.Error, ~r/This strategy does not implement/, fn ->
+    assert_raise OAuth2Client.Error, ~r/This strategy does not implement/, fn ->
       authorize_url(client)
     end
   end
@@ -37,7 +37,7 @@ defmodule OAuth2.Strategy.PasswordTest do
   end
 
   test "get_token when username and password are not provided", %{client: client} do
-    assert_raise OAuth2.Error, ~r/Missing required/, fn ->
+    assert_raise OAuth2Client.Error, ~r/Missing required/, fn ->
       Password.get_token(client, [], [])
     end
   end

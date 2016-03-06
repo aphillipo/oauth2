@@ -1,13 +1,13 @@
-defmodule OAuth2.Strategy.AuthCodeTest do
+defmodule OAuth2Client.Strategy.AuthCodeTest do
 
   use ExUnit.Case, async: true
   use Plug.Test
 
-  import OAuth2.TestHelpers
+  import OAuth2Client.TestHelpers
 
-  alias OAuth2.Client
-  alias OAuth2.AccessToken
-  alias OAuth2.Strategy.AuthCode
+  alias OAuth2Client.Client
+  alias OAuth2Client.AccessToken
+  alias OAuth2Client.Strategy.AuthCode
 
   setup do
     server = Bypass.open
@@ -50,7 +50,7 @@ defmodule OAuth2.Strategy.AuthCodeTest do
   end
 
   test "get_token throws and error if there is no 'code' param" do
-    assert_raise OAuth2.Error, ~r/Missing required key/, fn ->
+    assert_raise OAuth2Client.Error, ~r/Missing required key/, fn ->
       AuthCode.get_token(build_client(), [], [])
     end
   end

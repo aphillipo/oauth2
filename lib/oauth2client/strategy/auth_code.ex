@@ -1,4 +1,4 @@
-defmodule OAuth2.Strategy.AuthCode do
+defmodule OAuth2Client.Strategy.AuthCode do
   @moduledoc """
   The Authorization Code Strategy.
 
@@ -24,7 +24,7 @@ defmodule OAuth2.Strategy.AuthCode do
   exposing it to others, including the resource owner.
   """
 
-  use OAuth2.Strategy
+  use OAuth2Client.Strategy
 
   @doc """
   The authorization URL endpoint of the provider.
@@ -45,7 +45,7 @@ defmodule OAuth2.Strategy.AuthCode do
     {code, params} = Keyword.pop(params, :code, client.params["code"])
 
     unless code do
-      raise OAuth2.Error, reason: "Missing required key `code` for `#{inspect __MODULE__}`"
+      raise OAuth2Client.Error, reason: "Missing required key `code` for `#{inspect __MODULE__}`"
     end
 
     client

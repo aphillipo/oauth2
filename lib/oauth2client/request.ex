@@ -1,12 +1,12 @@
-defmodule OAuth2.Request do
+defmodule OAuth2Client.Request do
   @moduledoc false
 
   use HTTPoison.Base
 
-  import OAuth2.Util
+  import OAuth2Client.Util
 
-  alias OAuth2.Error
-  alias OAuth2.Response
+  alias OAuth2Client.Error
+  alias OAuth2Client.Response
 
   def request(method, url, body \\ "", headers \\ [], opts \\ []) do
     content_type = content_type(headers)

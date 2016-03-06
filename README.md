@@ -1,9 +1,9 @@
-# OAuth2 (Client)
+# OAuth2-Client
 
-[![Build Status](https://travis-ci.org/scrogson/oauth2.svg?branch=master)](https://travis-ci.org/scrogson/oauth2)
-[![Coverage Status](https://coveralls.io/repos/scrogson/oauth2/badge.svg?branch=master&service=github)](https://coveralls.io/github/scrogson/oauth2?branch=master)
+[![Build Status](https://travis-ci.org/aphillipo/oauth2-client.svg?branch=master)](https://travis-ci.org/scrogson/oauth2)
+[![Coverage Status](https://coveralls.io/repos/aphillipo/oauth2-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/scrogson/oauth2?branch=master)
 
-> An Elixir OAuth2 Client
+> An Elixir OAuth2 Client 
 
 ## Install
 
@@ -13,12 +13,12 @@
 def application do
   # Add the application to your list of applications.
   # This will ensure that it will be included in a release.
-  [applications: [:logger, :oauth2]]
+  [applications: [:logger, :oauth2client]]
 end
 
 defp deps do
   # Add the dependency
-  [{:oauth2, "~> 0.5"}]
+  [{:oauth2client, "~> 0.5"}]
 end
 ```
 
@@ -34,10 +34,10 @@ Current implemented strategies:
 
 ```elixir
 # Initialize a client with client_id, client_secret, site, and redirect_uri.
-# The strategy option is optional as it defaults to `OAuth2.Strategy.AuthCode`.
+# The strategy option is optional as it defaults to `OAuth2Client.Strategy.AuthCode`.
 
-client = OAuth2.Client.new([
-  strategy: OAuth2.Strategy.AuthCode, #default
+client = OAuth2Client.Client.new([
+  strategy: OAuth2Client.Strategy.AuthCode, #default
   client_id: "client_id",
   client_secret: "abc123",
   site: "https://auth.example.com",
@@ -45,21 +45,21 @@ client = OAuth2.Client.new([
 ])
 
 # Generate the authorization URL and redirect the user to the provider.
-OAuth2.Client.authorize_url!(client)
+OAuth2Client.Client.authorize_url!(client)
 # => "https://auth.example.com/oauth/authorize?client_id=client_id&redirect_uri=https%3A%2F%2Fexample.com%2Fauth%2Fcallback&response_type=code"
 
 # Use the authorization code returned from the provider to obtain an access token.
-token = OAuth2.Client.get_token!(client, code: "someauthcode")
+token = OAuth2Client.Client.get_token!(client, code: "someauthcode")
 
-# You can also use `OAuth2.Client.put_param/3` to update the client's `params`
+# You can also use `OAuth2Client.Client.put_param/3` to update the client's `params`
 # field. Example:
 # token =
 #   client
-#   |> OAuth2.Client.put_param(:code, "someauthcode")
-#   |> OAuth2.Client.get_token!()
+#   |> OAuth2Client.Client.put_param(:code, "someauthcode")
+#   |> OAuth2Client.Client.get_token!()
 
 # Use the access token to make a request for resources
-resource = OAuth2.AccessToken.get!(token, "/api/resource").body
+resource = OAuth2Client.AccessToken.get!(token, "/api/resource").body
 ```
 
 ## Write Your Own Strategy
@@ -68,12 +68,12 @@ Here's an example strategy for GitHub:
 
 ```elixir
 defmodule GitHub do
-  use OAuth2.Strategy
+  use OAuth2Client.Strategy
 
   # Public API
 
   def client do
-    OAuth2.Client.new([
+    OAuth2Client.Client.new([
       strategy: __MODULE__,
       client_id: "abc123",
       client_secret: "abcdefg",
@@ -87,24 +87,24 @@ defmodule GitHub do
   def authorize_url!(params \\ []) do
     client()
     |> put_param(:scope, "user,public_repo")
-    |> OAuth2.Client.authorize_url!(params)
+    |> OAuth2Client.Client.authorize_url!(params)
   end
 
   # you can pass options to the underlying http library via `options` parameter
   def get_token!(params \\ [], headers \\ [], options \\ []) do
-    OAuth2.Client.get_token!(client(), params, headers, options)
+    OAuth2Client.Client.get_token!(client(), params, headers, options)
   end
 
   # Strategy Callbacks
 
   def authorize_url(client, params) do
-    OAuth2.Strategy.AuthCode.authorize_url(client, params)
+    OAuth2Client.Strategy.AuthCode.authorize_url(client, params)
   end
 
   def get_token(client, params, headers) do
     client
     |> put_header("Accept", "application/json")
-    |> OAuth2.Strategy.AuthCode.get_token(params, headers)
+    |> OAuth2Client.Strategy.AuthCode.get_token(params, headers)
   end
 end
 ```
@@ -126,15 +126,15 @@ token = GitHub.get_token!(code: code)
 Use the access token to access desired resources.
 
 ```elixir
-user = OAuth2.AccessToken.get!(token, "/user").body
+user = OAuth2Client.AccessToken.get!(token, "/user").body
 
 # Or
-case OAuth2.AccessToken.get(token, "/user") do
-  {:ok, %OAuth2.Response{status_code: 401, body: body}} ->
+case OAuth2Client.AccessToken.get(token, "/user") do
+  {:ok, %OAuth2Client.Response{status_code: 401, body: body}} ->
     Logger.error("Unauthorized token")
-  {:ok, %OAuth2.Response{status_code: status_code, body: user}} when status_code in [200..399] ->
+  {:ok, %OAuth2Client.Response{status_code: status_code, body: user}} when status_code in [200..399] ->
     user
-  {:error, %OAuth2.Error{reason: reason}} ->
+  {:error, %OAuth2Client.Error{reason: reason}} ->
     Logger.error("Error: #{inspect reason}")
 end
 ```

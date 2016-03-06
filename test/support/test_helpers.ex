@@ -1,4 +1,4 @@
-defmodule OAuth2.TestHelpers do
+defmodule OAuth2Client.TestHelpers do
 
   import Plug.Conn
   import ExUnit.Assertions
@@ -56,14 +56,14 @@ defmodule OAuth2.TestHelpers do
   def build_client(opts \\ []) do
     default_client_opts
     |> Keyword.merge(opts)
-    |> OAuth2.Client.new()
+    |> OAuth2Client.Client.new()
   end
 
-  def build_token(opts \\ [], %OAuth2.Client{} = client) do
+  def build_token(opts \\ [], %OAuth2Client.Client{} = client) do
     default_token_opts
     |> Keyword.merge(opts)
     |> stringify_keys()
-    |> OAuth2.AccessToken.new(client)
+    |> OAuth2Client.AccessToken.new(client)
   end
 
   defp get_config(key) do
@@ -78,7 +78,7 @@ defmodule OAuth2.TestHelpers do
 
   defp default_token_opts do
     [access_token: "abcdefgh",
-     expires_at: OAuth2.Util.unix_now + 600,
+     expires_at: OAuth2Client.Util.unix_now + 600,
      token_type: "Bearer"]
   end
 

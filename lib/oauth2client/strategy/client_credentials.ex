@@ -1,4 +1,4 @@
-defmodule OAuth2.Strategy.ClientCredentials do
+defmodule OAuth2Client.Strategy.ClientCredentials do
   @moduledoc """
   The Client Credentials Strategy
 
@@ -15,21 +15,23 @@ defmodule OAuth2.Strategy.ClientCredentials do
   authorization server.
   """
 
-  use OAuth2.Strategy
+  use OAuth2Client.Strategy
 
   @doc """
   Not used for this strategy.
   """
   def authorize_url(_client, _params) do
-    raise OAuth2.Error, reason: "This strategy does not implement `authorize_url`."
+    raise OAuth2Client.Error, reason: "This strategy does not implement `authorize_url`."
   end
 
   @doc """
   Retrieve an access token given the specified strategy.
   """
   def get_token(client, params, headers) do
+    #require IEx
     {auth_scheme, params} = Keyword.pop(params, :auth_scheme, "auth_header")
-
+    IO.inspect auth_scheme
+    
     client
     |> put_param(:grant_type, "client_credentials")
     |> auth_scheme(auth_scheme)

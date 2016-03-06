@@ -1,11 +1,11 @@
-defmodule OAuth2.AccessToken do
+defmodule OAuth2Client.AccessToken do
   @moduledoc """
-  This module defines the `OAuth2.AccessToken` struct and provides functionality
-  to make authorized requests to an OAuth2 provider using the AccessToken
+  This module defines the `OAuth2Client.AccessToken` struct and provides functionality
+  to make authorized requests to an OAuth2Client provider using the AccessToken
   returned by the provider.
 
-  The `OAuth2.AccessToken` struct is created for you when you use the
-  `OAuth2.Client.get_token`
+  The `OAuth2Client.AccessToken` struct is created for you when you use the
+  `OAuth2Client.Client.get_token`
 
   ### Notes
 
@@ -18,31 +18,31 @@ defmodule OAuth2.AccessToken do
   ### Examples
 
   ```
-  token =  OAuth2.AccessToken.new("abc123", %OAuth2.Client{site: "www.example.com"})
+  token =  OAuth2Client.AccessToken.new("abc123", %OAuth2Client.Client{site: "www.example.com"})
 
-  case OAuth2.AccessToken.get(token, "/some/resource") do
-    {:ok, %OAuth2.Response{status_code: 401}} ->
+  case OAuth2Client.AccessToken.get(token, "/some/resource") do
+    {:ok, %OAuth2Client.Response{status_code: 401}} ->
       "Not Good"
-    {:ok, %OAuth2.Response{status_code: status_code, body: body}} when status_code in [200..299] ->
+    {:ok, %OAuth2Client.Response{status_code: status_code, body: body}} when status_code in [200..299] ->
       "Yay!!"
-    {:error, %OAuth2.Error{reason: reason}} ->
+    {:error, %OAuth2Client.Error{reason: reason}} ->
       reason
   end
 
-  response = OAuth2.AccessToken.get!(token, "/some/resource")
+  response = OAuth2Client.AccessToken.get!(token, "/some/resource")
 
-  response = OAuth2.AccessToken.post!(token, "/some/other/resources", %{foo: "bar"})
+  response = OAuth2Client.AccessToken.post!(token, "/some/other/resources", %{foo: "bar"})
 ```
 
   """
 
-  import OAuth2.Util
+  import OAuth2Client.Util
 
-  alias OAuth2.Error
-  alias OAuth2.Client
-  alias OAuth2.Request
-  alias OAuth2.Response
-  alias OAuth2.AccessToken
+  alias OAuth2Client.Error
+  alias OAuth2Client.Client
+  alias OAuth2Client.Request
+  alias OAuth2Client.Response
+  alias OAuth2Client.AccessToken
 
   @standard ["access_token", "refresh_token", "expires_in", "token_type"]
 
@@ -69,16 +69,16 @@ defmodule OAuth2.AccessToken do
             client: nil
 
   @doc """
-  Returns a new `OAuth2.AccessToken` struct given the access token `string`.
+  Returns a new `OAuth2Client.AccessToken` struct given the access token `string`.
 
   ### Example
 
   ```
-  iex(1)> OAuth2.AccessToken.new("abc123", %OAuth2.Client{})
-  %OAuth2.AccessToken{access_token: "abc123",
-   client: %OAuth2.Client{authorize_url: "/oauth/authorize", client_id: "",
+  iex(1)> OAuth2Client.AccessToken.new("abc123", %OAuth2Client.Client{})
+  %OAuth2Client.AccessToken{access_token: "abc123",
+   client: %OAuth2Client.Client{authorize_url: "/oauth/authorize", client_id: "",
     client_secret: "", headers: [], params: %{}, redirect_uri: "", site: "",
-    strategy: OAuth2.Strategy.AuthCode, token_method: :post,
+    strategy: OAuth2Client.Strategy.AuthCode, token_method: :post,
     token_url: "/oauth/token"}, expires_at: nil, other_params: %{},
    refresh_token: nil, token_type: "Bearer"}
   ```
@@ -94,16 +94,16 @@ defmodule OAuth2.AccessToken do
 
   Note if giving a map, please be sure to make the key a `string` no an `atom`.
 
-  This is used by `OAuth2.Client.get_token/4` to create the `OAuth2.AccessToken` struct.
+  This is used by `OAuth2Client.Client.get_token/4` to create the `OAuth2Client.AccessToken` struct.
 
   ### Example
 
   ```
-  iex(1)> OAuth2.AccessToken.new(%{"access_token" => "abc123"}, %OAuth2.Client{})
-   %OAuth2.AccessToken{access_token: "abc123",
-    client: %OAuth2.Client{authorize_url: "/oauth/authorize", client_id: "",
+  iex(1)> OAuth2Client.AccessToken.new(%{"access_token" => "abc123"}, %OAuth2Client.Client{})
+   %OAuth2Client.AccessToken{access_token: "abc123",
+    client: %OAuth2Client.Client{authorize_url: "/oauth/authorize", client_id: "",
      client_secret: "", headers: [], params: %{}, redirect_uri: "", site: "",
-     strategy: OAuth2.Strategy.AuthCode, token_method: :post,
+     strategy: OAuth2Client.Strategy.AuthCode, token_method: :post,
      token_url: "/oauth/token"}, expires_at: nil, other_params: %{},
     refresh_token: nil, token_type: "Bearer"}
   ```
@@ -121,7 +121,7 @@ defmodule OAuth2.AccessToken do
   end
 
   @doc """
-  Makes a `GET` request to the given `url` using the `OAuth2.AccessToken`
+  Makes a `GET` request to the given `url` using the `OAuth2Client.AccessToken`
   struct.
   """
   @spec get(t, binary, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
@@ -129,7 +129,7 @@ defmodule OAuth2.AccessToken do
     do: request(:get, token, url, "", headers, opts)
 
   @doc """
-  Same as `get/4` but returns a `OAuth2.Response` or `OAuth2.Error` exception if
+  Same as `get/4` but returns a `OAuth2Client.Response` or `OAuth2Client.Error` exception if
   the request results in an error.
   """
   @spec get!(t, binary, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -137,7 +137,7 @@ defmodule OAuth2.AccessToken do
     do: request!(:get, token, url, "", headers, opts)
 
   @doc """
-  Makes a `PUT` request to the given `url` using the `OAuth2.AccessToken`
+  Makes a `PUT` request to the given `url` using the `OAuth2Client.AccessToken`
   struct.
   """
   @spec put(t, binary, body, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
@@ -145,10 +145,10 @@ defmodule OAuth2.AccessToken do
     do: request(:put, token, url, body, headers, opts)
 
   @doc """
-  Same as `put/5` but returns a `OAuth2.Response` or `OAuth2.Error` exception if
+  Same as `put/5` but returns a `OAuth2Client.Response` or `OAuth2Client.Error` exception if
   the request results in an error.
 
-  An `OAuth2.Error` exception is raised if the request results in an
+  An `OAuth2Client.Error` exception is raised if the request results in an
   error tuple (`{:error, reason}`).
   """
   @spec put!(t, binary, body, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -156,7 +156,7 @@ defmodule OAuth2.AccessToken do
     do: request!(:put, token, url, body, headers, opts)
 
   @doc """
-  Makes a `PATCH` request to the given `url` using the `OAuth2.AccessToken`
+  Makes a `PATCH` request to the given `url` using the `OAuth2Client.AccessToken`
   struct.
   """
   @spec patch(t, binary, body, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
@@ -164,10 +164,10 @@ defmodule OAuth2.AccessToken do
     do: request(:patch, token, url, body, headers, opts)
 
   @doc """
-  Same as `patch/5` but returns a `OAuth2.Response` or `OAuth2.Error` exception if
+  Same as `patch/5` but returns a `OAuth2Client.Response` or `OAuth2Client.Error` exception if
   the request results in an error.
 
-  An `OAuth2.Error` exception is raised if the request results in an
+  An `OAuth2Client.Error` exception is raised if the request results in an
   error tuple (`{:error, reason}`).
   """
   @spec patch!(t, binary, body, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -175,17 +175,17 @@ defmodule OAuth2.AccessToken do
     do: request!(:patch, token, url, body, headers, opts)
 
   @doc """
-  Makes a `POST` request to the given URL using the `OAuth2.AccessToken`.
+  Makes a `POST` request to the given URL using the `OAuth2Client.AccessToken`.
   """
   @spec post(t, binary, body, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
   def post(token, url, body \\ "", headers \\ [], opts \\ []),
     do: request(:post, token, url, body, headers, opts)
 
   @doc """
-  Same as `post/5` but returns a `OAuth2.Response` or `OAuth2.Error` exception
+  Same as `post/5` but returns a `OAuth2Client.Response` or `OAuth2Client.Error` exception
   if the request results in an error.
 
-  An `OAuth2.Error` exception is raised if the request results in an
+  An `OAuth2Client.Error` exception is raised if the request results in an
   error tuple (`{:error, reason}`).
   """
   @spec post!(t, binary, body, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -193,17 +193,17 @@ defmodule OAuth2.AccessToken do
     do: request!(:post, token, url, body, headers, opts)
 
   @doc """
-  Makes a `DELETE` request to the given URL using the `OAuth2.AccessToken`.
+  Makes a `DELETE` request to the given URL using the `OAuth2Client.AccessToken`.
   """
   @spec delete(t, binary, body, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
   def delete(token, url, body \\ "", headers \\ [], opts \\ []),
     do: request(:delete, token, url, body, headers, opts)
 
   @doc """
-  Same as `delete/5` but returns a `OAuth2.Response` or `OAuth2.Error` exception
+  Same as `delete/5` but returns a `OAuth2Client.Response` or `OAuth2Client.Error` exception
   if the request results in an error.
 
-  An `OAuth2.Error` exception is raised if the request results in an
+  An `OAuth2Client.Error` exception is raised if the request results in an
   error tuple (`{:error, reason}`).
   """
   @spec delete!(t, binary, body, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -211,7 +211,7 @@ defmodule OAuth2.AccessToken do
     do: request!(:delete, token, url, body, headers, opts)
 
   @doc """
-  Makes a request of given type to the given URL using the `OAuth2.AccessToken`.
+  Makes a request of given type to the given URL using the `OAuth2Client.AccessToken`.
   """
   @spec request(atom, t, binary, body, Client.headers, Keyword.t) :: {:ok, Response.t} | {:error, Error.t}
   def request(method, token, url, body \\ "", headers \\ [], opts \\ []) do
@@ -225,10 +225,10 @@ defmodule OAuth2.AccessToken do
   end
 
   @doc """
-  Same as `request/6` but returns `OAuth2.Response` or raises an error if an
+  Same as `request/6` but returns `OAuth2Client.Response` or raises an error if an
   error occurs during the request.
 
-  An `OAuth2.Error` exception is raised if the request results in an
+  An `OAuth2Client.Error` exception is raised if the request results in an
   error tuple (`{:error, reason}`).
   """
   @spec request!(atom, t, binary, body, Client.headers, Keyword.t) :: Response.t | Error.t
@@ -251,7 +251,7 @@ defmodule OAuth2.AccessToken do
   end
   def refresh(%{refresh_token: refresh_token, client: client}, params, headers, opts) do
     refresh =
-      %{client | strategy: OAuth2.Strategy.Refresh}
+      %{client | strategy: OAuth2Client.Strategy.Refresh}
       |> Client.put_param(:refresh_token, refresh_token)
 
     case Client.get_token(refresh, params, headers, opts) do
@@ -277,7 +277,7 @@ defmodule OAuth2.AccessToken do
 
   Returns `true` unless `expires_at` is `nil`.
   """
-  @spec expires?(OAuth2.AccessToken.t) :: boolean
+  @spec expires?(OAuth2Client.AccessToken.t) :: boolean
   def expires?(%AccessToken{expires_at: nil} = _token), do: false
   def expires?(_), do: true
 

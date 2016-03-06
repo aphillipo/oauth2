@@ -1,15 +1,15 @@
 defmodule OAuth2Test do
   use ExUnit.Case
-  import OAuth2.TestHelpers
+  import OAuth2Client.TestHelpers
 
   @client build_client(client_id: "abc123",
                      client_secret: "xyz987",
                      site: "https://api.github.com",
                      redirect_uri: "http://localhost/auth/callback")
 
-  test "`new` delegates to `OAuth2.Client.new/1`" do
+  test "`new` delegates to `OAuth2Client.Client.new/1`" do
     client = @client
-    assert client.strategy == OAuth2.Strategy.AuthCode
+    assert client.strategy == OAuth2Client.Strategy.AuthCode
     assert client.site == "https://api.github.com"
     assert client.client_id == "abc123"
     assert client.client_secret == "xyz987"

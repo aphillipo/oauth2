@@ -1,4 +1,4 @@
-defmodule OAuth2.Util do
+defmodule OAuth2Client.Util do
   @moduledoc false
 
   def unix_now do
@@ -13,7 +13,7 @@ defmodule OAuth2.Util do
           {:ok, [{type, subtype, _}]} ->
             type <> "/" <> subtype
           error ->
-            raise OAuth2.Error, reason: error
+            raise OAuth2Client.Error, reason: error
         end
       nil ->
         "application/json"
